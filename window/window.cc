@@ -16,7 +16,7 @@ MainWindow::MainWindow()
   grid_.attach(image_, 5, 0, 128, 72);
 
   // 创建按钮
-  button_.set_label("Get Image");
+  button_.set_label("Get Audio");
   grid_.attach(button_, 1, 0, 1, 1);
 
   // 创建按钮
@@ -28,7 +28,7 @@ MainWindow::MainWindow()
   grid_.attach(button_2, 1, 2, 1, 1);
 
   // 显示帧率
-  fr_.set_text("Frame Rate:");
+  fr_.set_text("Status:");
   grid_.attach(fr_, 1, 10, 1, 1);
 
   char rate[10];
@@ -49,17 +49,20 @@ MainWindow::MainWindow()
   // 创建图像接收线程，在该线程中接收摄像头的图像数据
   std::thread data_trans_thread([&]()
   {
-      // cv::Mat dst = cv::imread("../source/data/zidane.jpg");
-      // cv::cvtColor(dst, dst, cv::COLOR_BGR2RGB);
-      cv::Mat dst;
-      while (true)
+      WAVData dst;
+      bool flag_buffer = false;
+      while (start_flag || flag_buffer)
       {
+      flag_buffer = start_flag;
     
       driver.dma.resume(dma_flag);
 
-      driver.dma.dma_auto_process( driver.getfd(), dst);
+      driver.dma.dma_auto_process( driver.getfd(), dst, !flag_buffer);
 
-      image_processor->store_frame(dst); 
+      //存储dst
+      std::cout << "Start processing and displaying !!!" << std::endl;
+
+      // image_processor->store_frame(dst); 
 
       //count++;
 
@@ -75,36 +78,51 @@ MainWindow::MainWindow()
   std::thread process_display_thread([&]()
    {
       bool start_processing = false; // 标志变量，用于指示是否需要启动图像处理线程
-      cv::Mat frame;
-      while (true) {
-          // 如果标志变量为true，则启动图像处理线程
-          if (start_processing) {
-          int j=0;
-          while (j<1000)
-          {
-            j++;
-          }
+      char filepath[80] = "";
+      while (true)
+      {
+        if(inf_flag){
+          inf_flag = false;
+          std::cout << "INFERENCE OPEN" << std::endl;
+          // 调用python脚本
+          // TODO
+          char rate[20];
+          sprintf(rate,"Start Inference");
+          fr.set_text(rate);
+        }
+      }
+      // bool start_processing = false; // 标志变量，用于指示是否需要启动图像处理线程
+      // cv::Mat frame;
+      // while (true) {
+      //     // 如果标志变量为true，则启动图像处理线程
+      //     if (start_processing) {
+      //     int j=0;
+      //     while (j<1000)
+      //     {
+      //       j++;
+      //     }
           
-          //std::cout << "Start processing and displaying !!!" << std::endl;
-          frame = image_processor->get_frame();
-          if (inf_flag)
-            frame = inf.base_exam(frame);
-          //cv::resize(frame, frame, cv::Size(1280, 720));
-          auto size = frame.size();
-          auto pixbuf = Gdk::Pixbuf::create_from_data(frame.data, Gdk::COLORSPACE_RGB, frame.channels() == 4, 8, size.width, size.height, (int)frame.step);
-          gdk_threads_enter();
-          image_.set(pixbuf);
-          gdk_threads_leave();
-          // 将标志变量重置为false
-          start_processing = false;
-          }
+      //     //std::cout << "Start processing and displaying !!!" << std::endl;
+      //     frame = image_processor->get_frame();
+      //     if (inf_flag)
+      //       frame = inf.base_exam(frame);
+      //     //cv::resize(frame, frame, cv::Size(1280, 720));
+      //     auto size = frame.size();
+      //     auto pixbuf = Gdk::Pixbuf::create_from_data(frame.data, Gdk::COLORSPACE_RGB, frame.channels() == 4, 8, size.width, size.height, (int)frame.step);
+      //     gdk_threads_enter();
+      //     image_.set(pixbuf);
+      //     gdk_threads_leave();
+      //     // 将标志变量重置为false
+      //     start_processing = false;
+      //     }
 
-          // 检查是否需要启动图像处理线程
-          if (start_flag) {
-              start_processing = true;
-              // start_flag = false;
-          }
-      } });
+      //     // 检查是否需要启动图像处理线程
+      //     if (start_flag) {
+      //         start_processing = true;
+      //         // start_flag = false;
+      //     }
+      //   } 
+      });
 
     // 显示所有子控件
     show_all_children();
@@ -124,19 +142,19 @@ bool MainWindow::update_count()
   sprintf(rate,"%d",image_processor->count);
   fr.set_text(rate);
   image_processor->count=0;*/
-  if(start_flag){
-  char rate[10];
-  sprintf(rate,"%d",image_processor->count);
-  fr.set_text(rate);
-  image_processor->count=0;
-  }
-  else
-  {
-  char rate[10];
-  sprintf(rate,"%d",0);
-  fr.set_text(rate);
-  image_processor->count=0;
-  }
+  // if(start_flag){
+  // char rate[10];
+  // sprintf(rate,"%d",image_processor->count);
+  // fr.set_text(rate);
+  // image_processor->count=0;
+  // }
+  // else
+  // {
+  // char rate[10];
+  // sprintf(rate,"%d",0);
+  // fr.set_text(rate);
+  // image_processor->count=0;
+  // }
   return true;
 }
 
@@ -152,10 +170,10 @@ void MainWindow::on_button_clicked()
 void MainWindow::on_button_clicked_1()
 {
   inf_flag = !inf_flag;
-  if (inf_flag)
-    button_1.set_label("INFERENCE CLOSE");
-  else
-    button_1.set_label("INFERENCE OPEN");
+  // if (inf_flag)
+  //   button_1.set_label("INFERENCE CLOSE");
+  // else
+  //   button_1.set_label("INFERENCE OPEN");
 }
 
 void MainWindow::on_button_clicked_2()

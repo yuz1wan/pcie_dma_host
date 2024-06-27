@@ -9,6 +9,7 @@
 #include "ImageProcessor.h"
 #include <mutex>
 #include <condition_variable>
+#include "wave.h"
 
 class MainWindow : public Gtk::Window
 {
