@@ -2,7 +2,7 @@
 #define DRIVER_H
 
 #include "config_gui.h"
-#include "video_dma.h"
+#include "audio_dma.h"
 #include "iostream"
 
 using namespace std;

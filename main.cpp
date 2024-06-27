@@ -2,7 +2,6 @@
 #include "window.h"
 
 using namespace std;
-using namespace cv;
 
 int main(int argc, char **argv)
 {
@@ -13,7 +12,7 @@ int main(int argc, char **argv)
 
     // 创建主窗口
     MainWindow window;
-    window.set_title("CICC2111  果宝特工队");
+    window.set_title("CICC5306");
     window.set_default_size(1280, 720);
 
     gdk_threads_leave();

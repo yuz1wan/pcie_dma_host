@@ -4,7 +4,6 @@
 #include "config_gui.h"
 #include <vector>
 #include "iostream"
-#include "inference.h"
 #include <chrono>
 #include <fstream>
 #include "wave.h"
@@ -39,7 +38,7 @@ public:
     DMA();
     ~DMA();
 
-    void dma_auto_process(int fd, WAVData &dst);
+    void dma_auto_process(int fd, WAVData &dst, bool end_flag);
     void resume(bool rdy);
     int frame_rate;
 
@@ -72,8 +71,8 @@ private:
     ** 输出参数:    无
     ** 返回参数:    无
     ****************************************************************************/
-    void dma_aline(cv::Mat &dst);
-    void dma_rd(cv::Mat &dst);
+    void dma_aline( WAVData &dst, bool end_flag);
+    void dma_rd( WAVData &dst, bool end_flag);
     void pcie_trans();
 };
 

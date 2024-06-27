@@ -1,9 +1,8 @@
 #include "window.h"
 
 MainWindow::MainWindow()
-    : driver(),
-    inf()
-{
+    : driver()
+    {
   // const std::vector<std::string> titles = {"test num", "Start size", "End size", "Packet Step", "other1", "other2"};
   // const std::vector<std::string> default_values = {"2025", "2048", "2048", "0", "0", "0"};
   // 创建网格容器
@@ -43,7 +42,7 @@ MainWindow::MainWindow()
   button_2.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_button_clicked_2));
 
   // 创建图像处理器对象
-  image_processor = new ImageProcessor();
+  // image_processor = new ImageProcessor();
 
 
   // 创建图像接收线程，在该线程中接收摄像头的图像数据

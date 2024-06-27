@@ -6,10 +6,8 @@
 #include <iostream>
 #include "host_driver.h"
 #include <thread>
-#include "ImageProcessor.h"
 #include <mutex>
 #include <condition_variable>
-#include "wave.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -35,9 +33,6 @@ protected:
   Gtk::Image image_;
 
   Driver driver;
-  // dnn inf
-  Inference inf;
-  ImageProcessor *image_processor;
   bool start_flag = false; // 标志变量，用于指示是否需要启动图像处理线程
   bool dma_flag   = false; // 标志变量，用于指示是否需要启动PCIE接受HDMI数据
   bool inf_flag   = false; // 标志变量，用于指示是否需要启动DNN推理

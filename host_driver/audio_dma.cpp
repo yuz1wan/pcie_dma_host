@@ -17,7 +17,7 @@ DMA::DMA()
         frame_rate(0),
         img_finish(false),
         line_valid_cnt(0),
-        img(V_NUM, H_NUM, CV_8UC3)
+        img()
 {
     dma_operator = new dma_oper;
     memset(dma_operator, 0, sizeof(dma_oper));

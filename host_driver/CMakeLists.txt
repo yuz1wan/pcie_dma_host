@@ -11,7 +11,6 @@ add_library(
 
 target_link_libraries(
     _DRIVER
-    PUBLIC _INFERENCE
 )
 
 target_include_directories(
