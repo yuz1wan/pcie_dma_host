@@ -15,8 +15,11 @@ MainWindow::MainWindow()
   grid_.attach(image_, 5, 0, 128, 72);
 
   // 创建按钮
-  button_.set_label("Get Audio");
+  button_.set_label("Play Audio");
   grid_.attach(button_, 1, 0, 1, 1);
+  // 创建文本框用于选择文件
+  Gtk::FileChooserButton file_chooser("Please choose a file");
+  grid_.attach(file_chooser, 2, 0, 1, 1);
 
   // 创建按钮
   button_1.set_label("INFERENCE OPEN");
@@ -29,6 +32,8 @@ MainWindow::MainWindow()
   // 显示帧率
   fr_.set_text("Status:");
   grid_.attach(fr_, 1, 10, 1, 1);
+
+
 
   char rate[10];
   sprintf(rate,"%d",0);
@@ -163,6 +168,21 @@ void MainWindow::on_button_clicked()
   start_flag = !start_flag;
   if (start_flag)
     button_.set_label("Stop Image");
+    // 获取文本框中的文件路径
+    std::string filepath = file_chooser.get_filename();
+    // 检查文件是否存在
+    if (filepath.empty())
+    {
+      std::cout << "Please select a file first!" << std::endl;
+      // 弹出对话框提示用户选择文件
+      Gtk::MessageDialog dialog(*this, "Please select a file first!");
+      dialog.run();
+      
+      return;
+    }
+    // 调用命令行播放音频
+    std::string cmd = "aplay " + filepath;
+    system(cmd.c_str());
   else
     button_.set_label("Get Image");
 }
