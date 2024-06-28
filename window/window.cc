@@ -85,6 +85,7 @@ MainWindow::MainWindow()
           std::cout << "INFERENCE OPEN" << std::endl;
           // 调用python脚本
           // TODO
+          system("echo 'bash: Start Inference'");
           char rate[20];
           sprintf(rate,"Start Inference");
           fr.set_text(rate);

@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include<stdlib.h>
 
 class MainWindow : public Gtk::Window
 {
